@@ -64,13 +64,6 @@ public class Demo extends javax.swing.JFrame {
     public Demo() {
         initComponents();
         loadSimulators();
-        
-        // TODO remove
-        dField.setText("3");
-        lField.setText("75");
-        tField.setText("100");
-        rField.setText("50");
-        bField.setText("0");
     }
     
     /**
