@@ -77,8 +77,8 @@ public class Tpfahp implements HeatedPlateSimulator {
     }
     
     
-	@Override
-	public String execute(int d, int l, int r, int t, int b) {
+    @Override
+    public synchronized String execute(int d, int l, int r, int t, int b) {
 		count = 0;  
         unchangedError = 0.01f;
 
@@ -109,5 +109,8 @@ public class Tpfahp implements HeatedPlateSimulator {
         return getResult(d);
 	}
 	
-	
+	@Override
+        public String toString() {
+            return "Tpfahp";
+        }
 }

@@ -23,7 +23,7 @@ public class Tpdohp implements HeatedPlateSimulator {
 	private Integer gridDimension;
 	
 	// performed iterations total
-	private Integer numberOfIterations = 0;
+	private Integer numberOfIterations;
 	
 	public Tpdohp() {
 
@@ -210,7 +210,7 @@ public class Tpdohp implements HeatedPlateSimulator {
 	
 
 	@Override
-	public String execute(int d, int l, int r, int t, int b) {
+	public synchronized String execute(int d, int l, int r, int t, int b) {
 		// define grid dimension
 		gridDimension = d;
 		
@@ -226,6 +226,9 @@ public class Tpdohp implements HeatedPlateSimulator {
 		rightEdge.persistCurrentTemperature();
 		bottomEdge.persistCurrentTemperature();
 		
+                // reset counter
+                numberOfIterations = 0;
+                
 		// first column reference
 		firstColumn = new ArrayList<LatticePoint>(gridDimension);
 		
@@ -245,6 +248,11 @@ public class Tpdohp implements HeatedPlateSimulator {
 		// return result
 		return result;
 	}
+        
+        @Override
+        public String toString() {
+            return "Tpdohp";
+        }
 
 }
 

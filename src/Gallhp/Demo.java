@@ -5,17 +5,117 @@
  */
 package Gallhp;
 
+import Tpdahp.Tpdahp;
+import Tpdohp.Tpdohp;
+import Tpfahp.Tpfahp;
+import Twfahp.Twfahp;
+import edu.gatech.hp.HeatedPlateSimulator;
+import java.awt.Cursor;
+import javax.swing.SwingWorker;
+
 /**
  *
  * @author jsoto
  */
 public class Demo extends javax.swing.JFrame {
 
+    SimulationTask worker;
+    
+    private class SimulationTask extends SwingWorker<Void, Void> {
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            
+            // disable controls
+            enableControls(false);
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+            // get input
+            int d = Integer.parseInt(dField.getText());
+            int l = Integer.parseInt(lField.getText());
+            int t = Integer.parseInt(tField.getText());
+            int r = Integer.parseInt(rField.getText());
+            int b = Integer.parseInt(bField.getText());
+            
+            // reset results area
+            resultsArea.setText("");
+        
+            // perform simulation
+            HeatedPlateSimulator simulator = (HeatedPlateSimulator) selector.getSelectedItem();
+            String result = simulator.execute(d, l, r, t, b);
+        
+            // publish results
+            resultsArea.setText(result);
+            
+            enableControls(false);
+            return null;
+        }
+        
+        @Override
+        public void done() {
+            enableControls(true);
+            setCursor(Cursor.getDefaultCursor());
+        }
+    }
+    
     /**
      * Creates new form Demo
      */
     public Demo() {
         initComponents();
+        loadSimulators();
+        
+        // TODO remove
+        dField.setText("3");
+        lField.setText("75");
+        tField.setText("100");
+        rField.setText("50");
+        bField.setText("0");
+    }
+    
+    /**
+     * Loads the different HeatedPlateSimulator implementations to
+     * the simulators list.
+     */
+    private void loadSimulators() {
+        // add Tpdah
+        Tpdahp tpdahp = new Tpdahp();
+        selector.addItem(tpdahp);
+        // add Tpdohp
+        Tpdohp tpdohp = new Tpdohp();
+        selector.addItem(tpdohp);        
+        // add Tpfahp
+        Tpfahp tpfahp = new Tpfahp();
+        selector.addItem(tpfahp);        
+        // add Twfahp
+        Twfahp twfahp = new Twfahp();
+        selector.addItem(twfahp);
+    }
+    
+    /**
+     * @return if the simulation input is valid
+     */
+    private boolean validateInput() {
+        return true;
+    }
+    
+    /**
+     * Disable or enable controls
+     * @param enable indicates if controls should be enabled or disabled
+     */
+    private void enableControls(boolean enable) {
+        // diable inputs
+        dField.setEnabled(enable);
+        lField.setEnabled(enable);
+        tField.setEnabled(enable);
+        rField.setEnabled(enable);
+        bField.setEnabled(enable);
+        
+        // disable buttons
+        simulateButton.setEnabled(enable);
+        
+        // disable selector
+        selector.setEnabled(enable);
     }
 
     /**
@@ -45,6 +145,7 @@ public class Demo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        resultsArea.setEditable(false);
         resultsArea.setColumns(20);
         resultsArea.setRows(5);
         resultsPanel.setViewportView(resultsArea);
@@ -65,13 +166,17 @@ public class Demo extends javax.swing.JFrame {
             }
         });
 
+        tField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tFieldActionPerformed(evt);
+            }
+        });
+
         rField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rFieldActionPerformed(evt);
             }
         });
-
-        selector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "itm1", "itm2", "itm3", "itm4" }));
 
         simulateButton.setBackground(new java.awt.Color(42, 82, 229));
         simulateButton.setForeground(java.awt.Color.white);
@@ -85,6 +190,7 @@ public class Demo extends javax.swing.JFrame {
         cancelButton.setBackground(new java.awt.Color(228, 60, 60));
         cancelButton.setForeground(java.awt.Color.white);
         cancelButton.setText("Cancel");
+        cancelButton.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,9 +269,18 @@ public class Demo extends javax.swing.JFrame {
 
     private void simulateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateButtonActionPerformed
         // TODO add your handling code here:
-        String selection = (String) selector.getSelectedItem();
-        resultsArea.setText(selection);
+        if(!validateInput()) {
+            return;
+        }
+        
+        // execute simulation
+        worker = new SimulationTask();
+        worker.execute();
     }//GEN-LAST:event_simulateButtonActionPerformed
+
+    private void tFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tFieldActionPerformed
 
     /**
      * @param args the command line arguments

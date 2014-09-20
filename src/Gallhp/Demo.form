@@ -108,6 +108,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="resultsArea">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
@@ -147,6 +148,9 @@
     <Component class="javax.swing.JTextField" name="lField">
     </Component>
     <Component class="javax.swing.JTextField" name="tField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tFieldActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="rField">
       <Events>
@@ -156,16 +160,6 @@
     <Component class="javax.swing.JTextField" name="bField">
     </Component>
     <Component class="javax.swing.JComboBox" name="selector">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="itm1"/>
-            <StringItem index="1" value="itm2"/>
-            <StringItem index="2" value="itm3"/>
-            <StringItem index="3" value="itm4"/>
-          </StringArray>
-        </Property>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="simulateButton">
       <Properties>
@@ -190,6 +184,7 @@
           <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
   </SubComponents>
